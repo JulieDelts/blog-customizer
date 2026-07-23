@@ -59,7 +59,10 @@ export const ArticleParamsForm = ({
 		onApply(initialState);
 	};
 
-	const updateFormState = (field: keyof ArticleStateType, value: any) => {
+	const updateFormState = <K extends keyof ArticleStateType>(
+		field: K,
+		value: ArticleStateType[K]
+	) => {
 		setFormState((prev) => ({ ...prev, [field]: value }));
 	};
 
