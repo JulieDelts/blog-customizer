@@ -9,7 +9,6 @@ import styles from './ArticleParamsForm.module.scss';
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 import clsx from 'clsx';
 import {
-	defaultArticleState,
 	fontFamilyOptions,
 	fontColors,
 	backgroundColors,
@@ -19,38 +18,34 @@ import {
 } from 'src/constants/articleProps';
 
 type Props = {
-	isOpen: boolean;
 	appliedState: ArticleStateType;
 	initialState: ArticleStateType;
-	onToggle: () => void;
-	onClose: () => void;
 	onApply: (newState: ArticleStateType) => void;
 };
 
 export const ArticleParamsForm = ({
-	isOpen,
 	appliedState,
 	initialState,
-	onToggle,
-	onClose,
 	onApply,
 }: Props) => {
-	const [formState, setFormState] = useState<ArticleStateType>(
-		appliedState ?? defaultArticleState
-	);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [formState, setFormState] = useState<ArticleStateType>(appliedState);
 
 	const rootRef = useRef<HTMLDivElement>(null);
 
 	useOutsideClickClose({
 		isOpen,
 		rootRef,
-		onClose,
+		onClose: () => setIsOpen(false),
 		onChange: () => {},
 	});
+
+	const handleToggle = () => setIsOpen((v) => !v);
 
 	const handleApply = (e: React.FormEvent) => {
 		e.preventDefault();
 		onApply(formState);
+		setIsOpen(false);
 	};
 
 	const handleReset = (e?: React.FormEvent) => {
@@ -67,10 +62,9 @@ export const ArticleParamsForm = ({
 	};
 
 	return (
-		<>
-			<ArrowButton isOpen={isOpen} onClick={onToggle} />
+		<div ref={rootRef}>
+			<ArrowButton isOpen={isOpen} onClick={handleToggle} />
 			<aside
-				ref={rootRef}
 				className={clsx(styles.container, isOpen && styles.container_open)}>
 				<form
 					className={styles.form}
@@ -117,6 +111,6 @@ export const ArticleParamsForm = ({
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };

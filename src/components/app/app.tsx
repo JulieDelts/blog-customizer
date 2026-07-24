@@ -3,17 +3,15 @@ import clsx from 'clsx';
 import { Article } from '../article/Article';
 import { ArticleParamsForm } from '../article-params-form/ArticleParamsForm';
 import { defaultArticleState } from './../../constants/articleProps';
+import { ArticleStateType } from 'src/constants/articleProps';
 import styles from './app.module.scss';
 
 export const App = () => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const [appliedState, setAppliedState] = useState(defaultArticleState);
+	const [appliedState, setAppliedState] =
+		useState<ArticleStateType>(defaultArticleState);
 
-	const handleToggle = () => setIsOpen((v) => !v);
-	const handleClose = () => setIsOpen(false);
-	const handleApply = (newState: typeof defaultArticleState) => {
+	const handleApply = (newState: ArticleStateType) => {
 		setAppliedState(newState);
-		setIsOpen(false);
 	};
 
 	return (
@@ -29,11 +27,8 @@ export const App = () => {
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				isOpen={isOpen}
 				appliedState={appliedState}
 				initialState={defaultArticleState}
-				onToggle={handleToggle}
-				onClose={handleClose}
 				onApply={handleApply}
 			/>
 			<Article />
